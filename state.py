@@ -1,6 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function
+
+
 class State():
     
     #player coordintate (#,#)
@@ -8,14 +11,18 @@ class State():
     #boxes list of coordintates into a dict ((#,#):# , (#,#):#, ...)
     #storages list of coordintates into a dict ((#,#):#, (#,#):#, ...)
     #obstacles list of coordintates ((#,#), (#,#), ...)
-    def __init__(self, player, boxes):
-        
+    def __init__(self, player, boxes, movement):
         self.player = player
         self.boxes = boxes
+        self.movement = movement
         
-    
+    """
+    def __eq__(self, otherState):
+        return self.player == otherState.player and self.boxes == otherState.boxes"""
+
     def __hash__(self):
-        return hash(self.player, self.boxes)
+        return hash((self.player, self.boxes ))
+    
     
     def possibleMoves(self, storages, obstacles):
         possibleMoves = []
@@ -24,7 +31,8 @@ class State():
             newPlayerPos = (self.player[0]+directions[0], self.player[1]+directions[1])
             if (newPlayerPos in obstacles):
                 continue
-            
+
+            #self.boxes is a dict
             newBoxesPos = dict(self.boxes)
             if (newPlayerPos in self.boxes):
                 newBoxPos = (newPlayerPos[0]+directions[0], newPlayerPos[1]+directions[1])
@@ -38,18 +46,18 @@ class State():
                 #As result we actualizate the pos, removing and adding at the same index
                 newBoxesPos[newBoxPos] = i
             
-            newState = State(newPlayerPos, newBoxesPos)
-            
+            newState = State(newPlayerPos, newBoxesPos, directions)
+            """
             print ('Las cajas están en: ')
             print (newState.boxes)
             print ('El jugador está en: ')
-            print (newState.player)
+            print (newState.player)"""
             possibleMoves.append(newState)
         return possibleMoves
 
     #return True if is a deadlock, False in otherwise
-    def isDeadLock(storagesIn, obstaclesIn):
-        for coordinateBox in self.box:
+    def isDeadLock(self, storagesIn, obstaclesIn):
+        for coordinateBox in self.boxes:
             if coordinateBox in storagesIn:
                 continue
             else:
@@ -90,7 +98,7 @@ class State():
                 #################################
                 #             w  any
                 #            box  w
-                if (r in obstaclesIn) and (up in obstaclesIn:):
+                if (r in obstaclesIn) and (up in obstaclesIn):
                     return True
                 
 
@@ -116,32 +124,48 @@ class State():
                     if (up in obstaclesIn) or (up in self.boxes):
                         if (dul in obstaclesIn) or (dul in self.boxes):
                             return True
-        rerturn False        
+        return False        
 
-    def isGoalState(storagesIn):
+    def isGoalState(self, storagesIn):
         for box in self.boxes:
             if box not in storagesIn:
                 return False
         return True
+    
+
+    def printMap(self, obstaclesIn, storagesIn):
+        matrix = [[' ' for col in range(6)] for row in range(6)]
+        for obstacles in obstaclesIn:
+            matrix[obstacles[0]][obstacles[1]] = 'w'
+        for storages in storagesIn:
+            matrix[storages[0]][storages[1]] = 'x'
+        for box in self.boxes:
+            matrix[box[0]][box[1]] = 'b'
+        matrix[self.player[0]][self.player[1]] = '?'
+        for i in range(6):
+            for j in range(6):
+                print (matrix[i][j], end='')
+            print ()
+
 
 class Node():
 
-    def __init__(self, player, boxes, movement, parent):
-        self.stateNode = State(player, boxes)
-        self.movement = movement
+    def __init__(self, state, parent):
+        self.state = state
         self.parent = parent
     
+
+    def isParent(self):
+        #Return True if we look a state iqual on this path
+        
+        last = self.parent
+        actual = self.state
+        while last:
+            if (last.state.boxes == actual.boxes) and (last.state.player == actual.player):
+                return True
+            last = last.parent
+        return False
     
-
-
-
-
-"""
-obstacles = [(0,0), (0,1), (0,2), (0,3), (0,4), (0,5), (1,0), (1,4), (1,5), (2,0), (2,5), (3,0), (3,5), (4,0), (4,5), (5,0), (5,1), (5,2), (5,3), (5,4), (5,5)]
-storages = {(2,1): 0, (2,3):1}
-stateObj = State((1,2), {(2,2):0, (2,3):1})
-stateObj.possibleMoves(storages, obstacles)"""
     
-
 
 
