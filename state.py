@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function
+
 
 
 class State():
@@ -132,7 +132,7 @@ class State():
                 return False
         return True
     
-
+    """
     def printMap(self, obstaclesIn, storagesIn):
         matrix = [[' ' for col in range(6)] for row in range(6)]
         for obstacles in obstaclesIn:
@@ -141,11 +141,23 @@ class State():
             matrix[storages[0]][storages[1]] = 'x'
         for box in self.boxes:
             matrix[box[0]][box[1]] = 'b'
-        matrix[self.player[0]][self.player[1]] = '?'
+        matrix[self.player[0]][self.player[1]] = 'I'
         for i in range(6):
             for j in range(6):
                 print (matrix[i][j], end='')
-            print ()
+            print ()"""
+
+    def getMap(self, obstaclesIn, storagesIn):
+        matrix = [[' ' for col in range(6)] for row in range(6)]
+        for obstacles in obstaclesIn:
+            matrix[obstacles[0]][obstacles[1]] = 'w'
+        for storages in storagesIn:
+            matrix[storages[0]][storages[1]] = 'x'
+        for box in self.boxes:
+            matrix[box[0]][box[1]] = 'b'
+        matrix[self.player[0]][self.player[1]] = 'I'
+
+        return matrix
 
 
 class Node():
@@ -153,7 +165,41 @@ class Node():
     def __init__(self, state, parent):
         self.state = state
         self.parent = parent
+
+    def getPath(self):
+        #Return the path of movements takes to this state
+        path = [self.state.movement]
+        actual = self.parent
+        while actual:
+            path.append(actual.state.movement)
+            actual = actual.parent
+        path.reverse()
+        return path
+
+    def getMoves(self):
+        path = self.getPath()
+        nameOfMoves = {(0,0): 'Inicio', (0,-1): 'Izquierda', (1,0): 'Abajo', (0,1): 'Derecha', (-1,0): 'Arriba'}
+
+        formatMoves = ''
+        for moves in path:
+            formatMoves += nameOfMoves[moves] + ' => '
+        formatMoves += 'Objetivo completado'
+        return formatMoves
+
+    def getPathMaps(self, obstaclesIn, storagesIn):
+        #Return an array of matrixes 
+        pathOfStates=[self.state.getMap(obstaclesIn, storagesIn)]
+        
+        actual = self.parent
+        while actual:
+            pathOfStates.append(actual.state.getMap(obstaclesIn, storagesIn))
+            actual = actual.parent
+        pathOfStates.reverse()
+        return pathOfStates
     
+
+
+
 
     def isParent(self):
         #Return True if we look a state iqual on this path

@@ -1,10 +1,13 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 from state import *
+from collections import deque
+
 
 def DFS(stateObj, obstacles, storages):
     startNode = Node (stateObj, None)
-    stack = [startNode]
+    stack = deque([startNode])
 
     #https://wiki.python.org/moin/TimeComplexity
     #Make taboo the states that i have already reviewed, maybe for anothers paths
@@ -13,26 +16,59 @@ def DFS(stateObj, obstacles, storages):
     #taboo.add(stateObj)
     
     while stack :
-        print (len(stack))
         currentNode = stack.pop()
         
-        currentNode.state.printMap(obstacles, storages)
         if currentNode.state.isDeadLock(storages, obstacles):
             continue
         if currentNode.isParent():
             continue
         else:
             if(currentNode.state.isGoalState(storages)):
-                return stack
+                return currentNode
+                
             validMovesStates = currentNode.state.possibleMoves(storages, obstacles)
             for childState in validMovesStates:
-                #if(childState not in taboo):
+                
                 stack.append(Node(childState, currentNode))
 
-                #taboo.add(currentNode.state)
-    return []
+    return None
 
 
+def BFS(stateObj, obstacles, storages):
+    startNode = Node (stateObj, None)
+    stack = deque([startNode])
+
+    #https://wiki.python.org/moin/TimeComplexity
+    #Make taboo the states that i have already reviewed, maybe for anothers paths
+    #Pick set for complexity O(1) on average case for operation x E taboo (E: Pertenece)
+    #taboo = set()
+    #taboo.add(stateObj)
+    
+    while stack :
+        currentNode = stack.popleft()
+        
+        if currentNode.state.isDeadLock(storages, obstacles):
+            continue
+        if currentNode.isParent():
+            continue
+        else:
+            if(currentNode.state.isGoalState(storages)):
+                return currentNode
+                
+            validMovesStates = currentNode.state.possibleMoves(storages, obstacles)
+            for childState in validMovesStates:
+                
+                stack.append(Node(childState, currentNode))
+
+    return None
+
+def printMap(matrix):
+    for i in range(len(matrix)):
+        for j in range(6):
+            for k in range(6):
+                print (matrix[i][j][k], end='')
+            print ()
+        print()
 
 
 if __name__ == '__main__':
@@ -40,10 +76,19 @@ if __name__ == '__main__':
     storages = {(2,1): 0, (2,3):1}
     #stateObj = State((1,2), {(2,2):0, (2,3):1})
     #stateObj.possibleMoves(storages, obstacles)
-    
-    
+
     stateObj = State((1,2), {(3,1):0, (2,3):1}, (0,0))
-    DFS(stateObj, obstacles, storages)
+    result = BFS(stateObj, obstacles, storages)
+
+    if (result):
+        printMap (result.getPathMaps(obstacles, storages))
+        print (result.getMoves())
+    else:
+        'No fue posible solucionar el mapa'
+    
+    
+    
+    
 
     
     
