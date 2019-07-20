@@ -148,7 +148,7 @@ class State():
             print ()"""
 
     def getMap(self, obstaclesIn, storagesIn):
-        matrix = [[' ' for col in range(6)] for row in range(6)]
+        matrix = [[' ' for col in range(7)] for row in range(7)]
         for obstacles in obstaclesIn:
             matrix[obstacles[0]][obstacles[1]] = 'w'
         for storages in storagesIn:
@@ -196,10 +196,6 @@ class Node():
             actual = actual.parent
         pathOfStates.reverse()
         return pathOfStates
-    
-
-
-
 
     def isParent(self):
         #Return True if we look a state iqual on this path
@@ -212,6 +208,13 @@ class Node():
             last = last.parent
         return False
     
+"""    
+class NodeDepth(Node):
+    def __init__(self, state, parent, depth):
+        Node.__init__(self, state, parent)"""
+
+
+
     
 
 
