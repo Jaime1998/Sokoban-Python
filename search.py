@@ -71,21 +71,75 @@ def printMap(matrix):
         print()
 
 
+def readBoard(obstacles, storages, stateObj):
+    agent = ()
+    boxes = {}
+    numline = 0
+    numstorages= 0
+    flag = True
+    while True:
+        try:
+            filename = raw_input("mapa: ")
+            file = open(str(filename))
+            break
+        except :
+            print("archivo invalido")
+    for line in file.readlines():
+        if line == "\n":
+            break
+        if line[0] == "W" or line[0] == "0":
+            for i in range(0,len(line)):
+                if line[i] == "W":
+                    obstacles.append((numline,i))
+                else :
+                    if line[i] == "X":
+                        storages[(numline,i)] = numstorages
+                        numstorages = numstorages + 1
+            numline = numline +1
+        else:
+            if flag:
+                coords = line[0:len(line)-1].split(",")
+                agent = (int(coords[0]),int(coords[1]))
+                numstorages = 0
+                flag = False
+            else:
+                coords = line[0:len(line)-1].split(",")
+                boxes[(int(coords[0]),int(coords[1]))] = numstorages
+                numstorages = numstorages + 1
+            stateObj = State(agent,boxes,agent)
+            numline = numline + 1
+    file.close()
+    print("agent")
+    print(agent)
+    print("boxes")
+    print(boxes)
+    stateObj = State(agent,boxes,(0,0))
+    return obstacles, storages, stateObj
+
+
 if __name__ == '__main__':
-    obstacles = [(0,0), (0,1), (0,2), (0,3), (0,4), (0,5), (1,0), (1,4), (1,5), (2,0), (2,5), (3,0), (3,3), (3,5), (4,0), (4,5), (5,0), (5,1), (5,2), (5,3), (5,4), (5,5)]
-    storages = {(2,1): 0, (2,3):1}
+    #obstacles = [(0,0), (0,1), (0,2), (0,3), (0,4), (0,5), (1,0), (1,4), (1,5), (2,0), (2,5), (3,0), (3,3), (3,5), (4,0), (4,5), (5,0), (5,1), (5,2), (5,3), (5,4), (5,5)]
+    #storages = {(2,1): 0, (2,3):1}
     #stateObj = State((1,2), {(2,2):0, (2,3):1})
     #stateObj.possibleMoves(storages, obstacles)
+    #stateObj = State((1,2), {(3,1):0, (2,3):1}, (0,0))
+    obstacles = []
+    storages = {}
+    stateObj = None
+    obstacles, storages, stateObj = readBoard(obstacles, storages, stateObj)
+    print("obstacles")
+    print(obstacles)
+    print("storages")
+    print(storages)
 
-    stateObj = State((1,2), {(3,1):0, (2,3):1}, (0,0))
-    result = BFS(stateObj, obstacles, storages)
+    result = DFS(stateObj, obstacles, storages)
 
     if (result):
         printMap (result.getPathMaps(obstacles, storages))
         print (result.getMoves())
     else:
         'No fue posible solucionar el mapa'
-    
+
     
     
     

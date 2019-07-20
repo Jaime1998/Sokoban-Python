@@ -148,7 +148,7 @@ class State():
             print ()"""
 
     def getMap(self, obstaclesIn, storagesIn):
-        matrix = [[' ' for col in range(6)] for row in range(6)]
+        matrix = [[' ' for col in range(7)] for row in range(7)]
         for obstacles in obstaclesIn:
             matrix[obstacles[0]][obstacles[1]] = 'w'
         for storages in storagesIn:
