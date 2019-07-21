@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
 from state import *
@@ -177,10 +177,65 @@ def readBoard(fileName, obstacles, storages, stateObj):
     stateObj = State(agent,boxes,(0,0))
     return obstacles, storages, stateObj, high, width
 
+def formatInput(lines):
+    numStorages = 0
+    obstacles=[]
+    storages={}
+    boxes={}
+    
+    
+    for i, line in enumerate(lines):
+        #if line[0].lower() == 'w' or line[0] == "0":
+        
+        for j, symbol in enumerate(list(line)):
+            
+            if symbol.lower() == 'w':
+                obstacles.append((i, j))
+                continue
+            if symbol.lower() == 'x':
+                storages[(i,j)] = numStorages
+                
+                lineBox = lines.pop().split(',')
+                print("ssssssssssssssss")
+                print (lineBox)
+                print("ssssssssssssssss")
+                coordinateBox = lineBox.split(',')
+                
+                boxes[(coordinateBox[0].strip(), coordinateBox[1].strip())] = numStorages
+                
+                numStorages = numStorages + 1
+                continue
+            linePlayer = lines.pop()
+            coordinatePlayer = linePlayer.split(',')
+            player = (coordinatePlayer[0].strip(), coordinatePlayer[1].strip)
+    high = len(lines)-1-numStorages
+    width = len(lines[0])
+    state = State(player, boxes, (0,0))
+    print ('obstaculos')
+    print (obstacles)
+    print ('storages')
+    print (sotrages)
+    print ('boxes')
+    print (boxes)
+    print ('player')
+    print (player)
+    print ('high')
+    print (high)
+    print ('width')
+    print (width)
+    return obstacles, storages, state, high, width
 
 if __name__ == '__main__':
     import sys
-
+    lines = []
+    for line in sys.stdin:
+        stripped = line.strip()
+        if not stripped:
+            break
+        lines.append(stripped)
+    print (lines)
+    
+    obstacles, storages, state, high, width = formatInput(lines)
     if len(sys.argv) <= 1:
         print ('Esta prueba requiere un archivo. Por favor seleccione uno del directorio del programa. (ej. python3 search.py nivel1.txt)')
     else:
