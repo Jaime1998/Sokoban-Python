@@ -6,8 +6,8 @@ class State():
     #player coordintate (#,#)
 
     #boxes list of coordintates into a dict ((#,#):# , (#,#):#, ...)
-    #storages list of coordintates into a dict ((#,#):#, (#,#):#, ...)
-    #obstacles list of coordintates ((#,#), (#,#), ...)
+    #movement (0,1) or (1,0) or (0,-1) or (-1,0)
+    
     def __init__(self, player, boxes, movement):
         self.player = player
         self.boxes = boxes
