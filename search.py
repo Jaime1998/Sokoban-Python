@@ -174,10 +174,6 @@ def readBoard(fileName, obstacles, storages, stateObj):
             stateObj = State(agent,boxes,agent)
             numline = numline + 1
     file.close()
-    print("agent")
-    print(agent)
-    print("boxes")
-    print(boxes)
     stateObj = State(agent,boxes,(0,0))
     return obstacles, storages, stateObj, high, width
 
@@ -202,37 +198,33 @@ if __name__ == '__main__':
         #stateObj, object (player, boxes, movement)
         stateObj = None
         obstacles, storages, stateObj, high, width = readBoard(fileName, obstacles, storages, stateObj)
-        print("obstacles")
-        print(obstacles)
-        print("storages")
-        print(storages)
+        
 
         result = BFS(stateObj, obstacles, storages)
-        print ('##################################################')
+        print ()
         print ('Para el algoritmo BFS:')
-        print ('##################################################')
         if (result):
-            printMap (result.getPathMaps(obstacles, storages, high, width))
+            #printMap (result.getPathMaps(obstacles, storages, high, width))
             print (result.getMoves())
         else:
             print ('No fue posible solucionar el mapa')
         
         result = DFS(stateObj, obstacles, storages)
-        print ('##################################################')
+        print ()
         print ('Para el algoritmo DFS:')
-        print ('##################################################')
+        
         if (result):
-            printMap (result.getPathMaps(obstacles, storages, high, width))
+            #printMap (result.getPathMaps(obstacles, storages, high, width))
             print (result.getMoves())
         else:
             print ('No fue posible solucionar el mapa')
         
         result = IDS(stateObj, obstacles, storages)
-        print ('##################################################')
+        print ()
         print ('Para el algoritmo IDS:')
-        print ('##################################################')
+
         if (result):
-            printMap (result.getPathMaps(obstacles, storages, high, width))
+            #printMap (result.getPathMaps(obstacles, storages, high, width))
             print (result.getMoves())
         else:
             print ('No fue posible solucionar el mapa')

@@ -20,7 +20,6 @@ class State():
     def __hash__(self):
         return hash((self.player, tuple(self.boxes )))
     
-    
     def possibleMoves(self, storages, obstacles):
         possibleMoves = []
         #move into up, right, down and left
@@ -44,11 +43,7 @@ class State():
                 newBoxesPos[newBoxPos] = i
             
             newState = State(newPlayerPos, newBoxesPos, directions)
-            """
-            print ('Las cajas están en: ')
-            print (newState.boxes)
-            print ('El jugador está en: ')
-            print (newState.player)"""
+            
             possibleMoves.append(newState)
         return possibleMoves
 
@@ -129,21 +124,6 @@ class State():
                 return False
         return True
     
-    """
-    def printMap(self, obstaclesIn, storagesIn):
-        matrix = [[' ' for col in range(6)] for row in range(6)]
-        for obstacles in obstaclesIn:
-            matrix[obstacles[0]][obstacles[1]] = 'w'
-        for storages in storagesIn:
-            matrix[storages[0]][storages[1]] = 'x'
-        for box in self.boxes:
-            matrix[box[0]][box[1]] = 'b'
-        matrix[self.player[0]][self.player[1]] = 'I'
-        for i in range(6):
-            for j in range(6):
-                print (matrix[i][j], end='')
-            print ()"""
-
     def getMap(self, obstaclesIn, storagesIn, highIn, widthIn):
         matrix = [[' ' for col in range(widthIn)] for row in range(highIn)]
         for obstacles in obstaclesIn:
@@ -175,12 +155,12 @@ class Node():
 
     def getMoves(self):
         path = self.getPath()
-        nameOfMoves = {(0,0): 'Inicio', (0,-1): 'Izquierda', (1,0): 'Abajo', (0,1): 'Derecha', (-1,0): 'Arriba'}
+        nameOfMoves = {(0,0): '', (0,-1): 'L', (1,0): 'D', (0,1): 'R', (-1,0): 'U'}
 
         formatMoves = ''
         for moves in path:
-            formatMoves += nameOfMoves[moves] + ' => '
-        formatMoves += 'Objetivo completado'
+            formatMoves += nameOfMoves[moves] + ' '
+        
         return formatMoves
 
     def getPathMaps(self, obstaclesIn, storagesIn, highIn, widthIn):
