@@ -196,10 +196,6 @@ class Node():
             actual = actual.parent
         pathOfStates.reverse()
         return pathOfStates
-    
-
-
-
 
     def isParent(self):
         #Return True if we look a state iqual on this path
@@ -212,6 +208,13 @@ class Node():
             last = last.parent
         return False
     
+"""    
+class NodeDepth(Node):
+    def __init__(self, state, parent, depth):
+        Node.__init__(self, state, parent)"""
+
+
+
     
 
 
