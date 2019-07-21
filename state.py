@@ -1,9 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-
-
-
 class State():
     
     #player coordintate (#,#)
@@ -16,12 +13,12 @@ class State():
         self.boxes = boxes
         self.movement = movement
         
-    """
+    
     def __eq__(self, otherState):
-        return self.player == otherState.player and self.boxes == otherState.boxes"""
+        return self.player == otherState.player and self.boxes == otherState.boxes
 
     def __hash__(self):
-        return hash((self.player, self.boxes ))
+        return hash((self.player, tuple(self.boxes )))
     
     
     def possibleMoves(self, storages, obstacles):
@@ -147,8 +144,8 @@ class State():
                 print (matrix[i][j], end='')
             print ()"""
 
-    def getMap(self, obstaclesIn, storagesIn):
-        matrix = [[' ' for col in range(7)] for row in range(7)]
+    def getMap(self, obstaclesIn, storagesIn, highIn, widthIn):
+        matrix = [[' ' for col in range(widthIn)] for row in range(highIn)]
         for obstacles in obstaclesIn:
             matrix[obstacles[0]][obstacles[1]] = 'w'
         for storages in storagesIn:
@@ -186,13 +183,13 @@ class Node():
         formatMoves += 'Objetivo completado'
         return formatMoves
 
-    def getPathMaps(self, obstaclesIn, storagesIn):
+    def getPathMaps(self, obstaclesIn, storagesIn, highIn, widthIn):
         #Return an array of matrixes 
-        pathOfStates=[self.state.getMap(obstaclesIn, storagesIn)]
+        pathOfStates=[self.state.getMap(obstaclesIn, storagesIn, highIn, widthIn)]
         
         actual = self.parent
         while actual:
-            pathOfStates.append(actual.state.getMap(obstaclesIn, storagesIn))
+            pathOfStates.append(actual.state.getMap(obstaclesIn, storagesIn, highIn, widthIn))
             actual = actual.parent
         pathOfStates.reverse()
         return pathOfStates
@@ -208,10 +205,12 @@ class Node():
             last = last.parent
         return False
     
-"""    
+   
 class NodeDepth(Node):
     def __init__(self, state, parent, depth):
-        Node.__init__(self, state, parent)"""
+        Node.__init__(self, state, parent)
+        self.depth = depth
+
 
 
 
