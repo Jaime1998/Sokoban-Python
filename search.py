@@ -140,14 +140,7 @@ def readBoard(fileName, obstacles, storages, stateObj):
     numline = 0
     numstorages= 0
     flag = True
-    while True:
-        try:
-            #filename = input("mapa: ")
-            file = open(str(fileName))
-            break
-        except :
-            print("archivo invalido")
-    for line in file.readlines():
+    for line in lines:
         if line == "\n":
             break
         if line[0] == "W" or line[0] == "0":
@@ -163,17 +156,16 @@ def readBoard(fileName, obstacles, storages, stateObj):
         else:
             if flag:
                 high = numline
-                coords = line[0:len(line)-1].split(",")
+                coords = line[0:len(line)].split(",")
                 agent = (int(coords[0]),int(coords[1]))
                 numstorages = 0
                 flag = False
             else:
-                coords = line[0:len(line)-1].split(",")
+                coords = line[0:len(line)].split(",")
                 boxes[(int(coords[0]),int(coords[1]))] = numstorages
                 numstorages = numstorages + 1
             stateObj = State(agent,boxes,agent)
             numline = numline + 1
-    file.close()
     stateObj = State(agent,boxes,(0,0))
     return obstacles, storages, stateObj, high, width
 
@@ -245,14 +237,14 @@ if __name__ == '__main__':
             
         obstacles = []
         storages = {}
-
+        stateObj = None
         #player coordintate (#,#)
         #boxes list of coordintates into a dict ((#,#):# , (#,#):#, ...)
         #movement (0,1) or (1,0) or (0,-1) or (-1,0)
         #stateObj, object (player, boxes, movement)
         
-        #obstacles, storages, state, high, width = readBoard(fileName, obstacles, storages, stateObj)
-        obstacles, storages, state, high, width = formatInput(lines)
+        obstacles, storages, state, high, width = readBoard(lines, obstacles, storages, stateObj)
+        #obstacles, storages, state, high, width = formatInput(lines)
         
 
         result = BFS(state, obstacles, storages)
