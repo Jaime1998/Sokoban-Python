@@ -187,34 +187,38 @@ def formatInput(lines):
     for i, line in enumerate(lines):
         #if line[0].lower() == 'w' or line[0] == "0":
         
-        for j, symbol in enumerate(list(line)):
+        for j, symbol in enumerate(line):
             
             if symbol.lower() == 'w':
                 obstacles.append((i, j))
+                
                 continue
+            
             if symbol.lower() == 'x':
                 storages[(i,j)] = numStorages
                 
-                lineBox = lines.pop().split(',')
+                lineBox = lines.pop()
                 print("ssssssssssssssss")
                 print (lineBox)
                 print("ssssssssssssssss")
                 coordinateBox = lineBox.split(',')
-                
-                boxes[(coordinateBox[0].strip(), coordinateBox[1].strip())] = numStorages
+                boxes[( int(coordinateBox[0].strip(), 10), int(coordinateBox[1].strip(), 10))] = numStorages
                 
                 numStorages = numStorages + 1
                 continue
-            linePlayer = lines.pop()
+            if symbol == '0':
+                continue
+            linePlayer = line
+            print (linePlayer)
             coordinatePlayer = linePlayer.split(',')
-            player = (coordinatePlayer[0].strip(), coordinatePlayer[1].strip)
+            player = (int (coordinatePlayer[0].strip(), 10), int(coordinatePlayer[1].strip, 10))
     high = len(lines)-1-numStorages
     width = len(lines[0])
     state = State(player, boxes, (0,0))
     print ('obstaculos')
     print (obstacles)
     print ('storages')
-    print (sotrages)
+    print (storages)
     print ('boxes')
     print (boxes)
     print ('player')
@@ -233,9 +237,54 @@ if __name__ == '__main__':
         if not stripped:
             break
         lines.append(stripped)
-    print (lines)
     
-    obstacles, storages, state, high, width = formatInput(lines)
+    if lines:
+            
+        #obstacles list of coordintates ((#,#), (#,#), ...)
+        #storages list of coordintates into a dict ((#,#):#, (#,#):#, ...)
+            
+        obstacles = []
+        storages = {}
+
+        #player coordintate (#,#)
+        #boxes list of coordintates into a dict ((#,#):# , (#,#):#, ...)
+        #movement (0,1) or (1,0) or (0,-1) or (-1,0)
+        #stateObj, object (player, boxes, movement)
+        
+        #obstacles, storages, state, high, width = readBoard(fileName, obstacles, storages, stateObj)
+        obstacles, storages, state, high, width = formatInput(lines)
+        
+
+        result = BFS(state, obstacles, storages)
+        print ()
+        print ('Para el algoritmo BFS:')
+        if (result):
+            #printMap (result.getPathMaps(obstacles, storages, high, width))
+            print (result.getMoves())
+        else:
+            print ('No fue posible solucionar el mapa')
+        
+        result = DFS(state, obstacles, storages)
+        print ()
+        print ('Para el algoritmo DFS:')
+        
+        if (result):
+            #printMap (result.getPathMaps(obstacles, storages, high, width))
+            print (result.getMoves())
+        else:
+            print ('No fue posible solucionar el mapa')
+        
+        result = IDS(state, obstacles, storages)
+        print ()
+        print ('Para el algoritmo IDS:')
+
+        if (result):
+            #printMap (result.getPathMaps(obstacles, storages, high, width))
+            print (result.getMoves())
+        else:
+            print ('No fue posible solucionar el mapa')
+    
+    """
     if len(sys.argv) <= 1:
         print ('Esta prueba requiere un archivo. Por favor seleccione uno del directorio del programa. (ej. python3 search.py nivel1.txt)')
     else:
@@ -282,7 +331,7 @@ if __name__ == '__main__':
             #printMap (result.getPathMaps(obstacles, storages, high, width))
             print (result.getMoves())
         else:
-            print ('No fue posible solucionar el mapa')
+            print ('No fue posible solucionar el mapa')"""
 
 
     
