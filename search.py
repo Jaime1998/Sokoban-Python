@@ -169,56 +169,6 @@ def readBoard(lines, obstacles, storages, stateObj):
     stateObj = State(agent,boxes,(0,0))
     return obstacles, storages, stateObj, high, width
 
-def formatInput(lines):
-    numStorages = 0
-    obstacles=[]
-    storages={}
-    boxes={}
-    for i, line in enumerate(lines):
-        #if line[0].lower() == 'w' or line[0] == "0":
-        
-        for j, symbol in enumerate(line):
-            
-            if symbol.lower() == 'w':
-                obstacles.append((i, j))
-                
-                continue
-            
-            if symbol.lower() == 'x':
-                storages[(i,j)] = numStorages
-                
-                lineBox = lines.pop()
-                print("ssssssssssssssss")
-                print (lineBox)
-                print("ssssssssssssssss")
-                coordinateBox = lineBox.split(',')
-                boxes[( int(coordinateBox[0].strip(), 10), int(coordinateBox[1].strip(), 10))] = numStorages
-                
-                numStorages = numStorages + 1
-                continue
-            if symbol == '0':
-                continue
-            linePlayer = line
-            print (linePlayer)
-            coordinatePlayer = linePlayer.split(',')
-            player = (int (coordinatePlayer[0].strip(), 10), int(coordinatePlayer[1].strip, 10))
-    high = len(lines)-1-numStorages
-    width = len(lines[0])
-    state = State(player, boxes, (0,0))
-    print ('obstaculos')
-    print (obstacles)
-    print ('storages')
-    print (storages)
-    print ('boxes')
-    print (boxes)
-    print ('player')
-    print (player)
-    print ('high')
-    print (high)
-    print ('width')
-    print (width)
-    return obstacles, storages, state, high, width
-
 if __name__ == '__main__':
     import sys
     lines = []
