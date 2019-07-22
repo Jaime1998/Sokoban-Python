@@ -134,7 +134,7 @@ def printMap(matrix):
         print()
 
 
-def readBoard(fileName, obstacles, storages, stateObj):
+def readBoard(lines, obstacles, storages, stateObj):
     agent = ()
     boxes = {}
     numline = 0
@@ -164,7 +164,7 @@ def readBoard(fileName, obstacles, storages, stateObj):
                 coords = line[0:len(line)].split(",")
                 boxes[(int(coords[0]),int(coords[1]))] = numstorages
                 numstorages = numstorages + 1
-            stateObj = State(agent,boxes,agent)
+            stateObj = State(agent,boxes,(0,0))
             numline = numline + 1
     stateObj = State(agent,boxes,(0,0))
     return obstacles, storages, stateObj, high, width
@@ -174,8 +174,6 @@ def formatInput(lines):
     obstacles=[]
     storages={}
     boxes={}
-    
-    
     for i, line in enumerate(lines):
         #if line[0].lower() == 'w' or line[0] == "0":
         
@@ -275,55 +273,4 @@ if __name__ == '__main__':
             print (result.getMoves())
         else:
             print ('No fue posible solucionar el mapa')
-    
-    """
-    if len(sys.argv) <= 1:
-        print ('Esta prueba requiere un archivo. Por favor seleccione uno del directorio del programa. (ej. python3 search.py nivel1.txt)')
-    else:
-        fileName = sys.argv[1].strip()
-
-        #obstacles list of coordintates ((#,#), (#,#), ...)
-        #storages list of coordintates into a dict ((#,#):#, (#,#):#, ...)
-        
-        obstacles = []
-        storages = {}
-
-        #player coordintate (#,#)
-        #boxes list of coordintates into a dict ((#,#):# , (#,#):#, ...)
-        #movement (0,1) or (1,0) or (0,-1) or (-1,0)
-        #stateObj, object (player, boxes, movement)
-        stateObj = None
-        obstacles, storages, stateObj, high, width = readBoard(fileName, obstacles, storages, stateObj)
-        
-
-        result = BFS(stateObj, obstacles, storages)
-        print ()
-        print ('Para el algoritmo BFS:')
-        if (result):
-            #printMap (result.getPathMaps(obstacles, storages, high, width))
-            print (result.getMoves())
-        else:
-            print ('No fue posible solucionar el mapa')
-        
-        result = DFS(stateObj, obstacles, storages)
-        print ()
-        print ('Para el algoritmo DFS:')
-        
-        if (result):
-            #printMap (result.getPathMaps(obstacles, storages, high, width))
-            print (result.getMoves())
-        else:
-            print ('No fue posible solucionar el mapa')
-        
-        result = IDS(stateObj, obstacles, storages)
-        print ()
-        print ('Para el algoritmo IDS:')
-
-        if (result):
-            #printMap (result.getPathMaps(obstacles, storages, high, width))
-            print (result.getMoves())
-        else:
-            print ('No fue posible solucionar el mapa')"""
-
-
     
