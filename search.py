@@ -1,6 +1,13 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
+'''
+Integrantes:
+Jaime Cuartas Granada-1632664
+Emily Esmeralda Carvajal Camelo-1630436
+Luis David Restrepo Hoyos-1427086
+'''
+
 from state import *
 from collections import deque
 
@@ -27,8 +34,9 @@ def DFS(stateObj, obstacles, storages):
             #Check if we get a goal state
             if(currentNode.state.isGoalState(storages)):
                 return currentNode
-            #Get the possible moves to generate new child nodes
+            #Get the possible moves to generate new child nodes and turn reverse to push later sin order to check UDRL
             validMovesStates = currentNode.state.possibleMoves(storages, obstacles)
+            validMovesStates.reverse()
             #Create a new node for each move and add to the tree if there is no a taboo state
             for childState in validMovesStates:
                 childNode = Node(childState, currentNode)
@@ -112,6 +120,7 @@ def IDS(stateObj, obstacles, storages, limit=10, increase=3):
                     return currentNode
                 #Get the possible moves to generate new child nodes
                 validMovesStates = currentNode.state.possibleMoves(storages, obstacles)
+                validMovesStates.reverse()
                 #Create a new node for each move and add to the tree if there is no a taboo state
                 for childState in validMovesStates:
                     childNode = NodeDepth(childState, currentNode, currentNode.depth+1)
@@ -120,6 +129,7 @@ def IDS(stateObj, obstacles, storages, limit=10, increase=3):
                         continue
                     else:
                         tree.append(childNode)
+                        #taboo.add(childNode.state)
 
 
 
@@ -144,7 +154,7 @@ def readBoard(lines, obstacles, storages, stateObj):
         if line == "\n":
             break
         if line[0] == "W" or line[0] == "0":
-            width = len(line) - 1
+            width = len(line)
             for i in range(0,len(line)):
                 if line[i] == "W":
                     obstacles.append((numline,i))
@@ -180,24 +190,21 @@ if __name__ == '__main__':
     
     if lines:
             
-        #obstacles list of coordintates ((#,#), (#,#), ...)
-        #storages list of coordintates into a dict ((#,#):#, (#,#):#, ...)
+        #obstacles: list of coordintates ((#,#), (#,#), ...)
+        #storages: list of coordintates into a dict ((#,#):#, (#,#):#, ...)
             
         obstacles = []
         storages = {}
-        stateObj = None
-        #player coordintate (#,#)
-        #boxes list of coordintates into a dict ((#,#):# , (#,#):#, ...)
-        #movement (0,1) or (1,0) or (0,-1) or (-1,0)
-        #stateObj, object (player, boxes, movement)
-        
-        obstacles, storages, state, high, width = readBoard(lines, obstacles, storages, stateObj)
-        #obstacles, storages, state, high, width = formatInput(lines)
-        
 
+        #player: coordintate (#,#)
+        #boxes: list of coordintates into a dict ((#,#):# , (#,#):#, ...)
+        #movement: (0,1) or (1,0) or (0,-1) or (-1,0)
+        #state: Object (player, boxes, movement)
+        stateObj = None
+        obstacles, storages, state, high, width = readBoard(lines, obstacles, storages, stateObj)
+        
         result = BFS(state, obstacles, storages)
-        print ()
-        print ('Para el algoritmo BFS:')
+        
         if (result):
             #printMap (result.getPathMaps(obstacles, storages, high, width))
             print (result.getMoves())
@@ -205,8 +212,6 @@ if __name__ == '__main__':
             print ('No fue posible solucionar el mapa')
         
         result = DFS(state, obstacles, storages)
-        print ()
-        print ('Para el algoritmo DFS:')
         
         if (result):
             #printMap (result.getPathMaps(obstacles, storages, high, width))
@@ -215,8 +220,7 @@ if __name__ == '__main__':
             print ('No fue posible solucionar el mapa')
         
         result = IDS(state, obstacles, storages)
-        print ()
-        print ('Para el algoritmo IDS:')
+        
 
         if (result):
             #printMap (result.getPathMaps(obstacles, storages, high, width))

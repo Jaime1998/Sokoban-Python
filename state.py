@@ -1,6 +1,13 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
+'''
+Integrantes:
+Jaime Cuartas Granada-1632664
+Emily Esmeralda Carvajal Camelo-1630436
+Luis David Restrepo Hoyos-1427086
+'''
+
 class State():
     
     #player coordintate (#,#)
@@ -22,8 +29,8 @@ class State():
     
     def possibleMoves(self, storages, obstacles):
         possibleMoves = []
-        #move into up, right, down and left
-        for directions in ((-1, 0), (0, 1), (1, 0), (0, -1)):
+        #move into up, down, rigth and left
+        for directions in ((-1, 0), (1, 0), (0, 1), (0, -1)):
             newPlayerPos = (self.player[0]+directions[0], self.player[1]+directions[1])
             if (newPlayerPos in obstacles):
                 continue
@@ -159,7 +166,7 @@ class Node():
 
         formatMoves = ''
         for moves in path:
-            formatMoves += nameOfMoves[moves] + ' '
+            formatMoves += nameOfMoves[moves]
         
         return formatMoves
 
