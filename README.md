@@ -18,7 +18,7 @@ Para todos los algoritmos de busqueda se implementó una estructura de datos nom
 
 Para el algoritmo bfs, se realiza una busqueda expandiendo por anchura cada nivel del arbol sin limite.
 
-# DFS:
+## DFS:
 
 Para el algoritmo dfs, se realiza la busqueda por profundidad expandiendo nodos en el orden Up, Down, Right y Left, sin limite, de esta manera siempre se encuentra la solución si la hay, más a la izquierda en el arbol. De esta manera no se garantiza retornar la solución más corta, pero si en la menor cantidad de tiempo posible.
 
